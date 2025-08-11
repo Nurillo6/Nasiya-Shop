@@ -1,6 +1,7 @@
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 
 export interface TextType {
     children:ReactNode,
-    classList?:string
+    classList?:string,
+    onClick?:(e:MouseEvent<HTMLParagraphElement>) => void
 }
