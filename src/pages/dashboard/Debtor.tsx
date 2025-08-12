@@ -97,6 +97,7 @@ const Debtor = () => {
     function handleSingleCreate(id:string){
         queryClient.invalidateQueries({queryKey:['single-debtor']})
         navigate(`${id}`)
+       
     }
     return (
         <div className="containers relative">
@@ -108,14 +109,17 @@ const Debtor = () => {
             </div>
             <div className="flex flex-col gap-[16px]">
                 {isLoading ? "laading..." : debtorList.map((item: ClientDebtor) => (
-                    <div onClick={() => handleSingleCreate(item.id)} key={item.id} className="p-[16px] cursor-pointer duration-300 hover:scale-[1.01] relative rounded-[16px] border-[1px] border-[#ECECEC] bg-[#F6F6F6]">
+                    <div onClick={() => handleSingleCreate(item.id)} id="debtor-wrapper" key={item.id} className="p-[16px] cursor-pointer duration-300 hover:scale-[1.01] relative rounded-[16px] border-[1px] border-[#ECECEC] bg-[#F6F6F6]">
                         <Heading classList="!text-[24px] mb-[4px]" tag="h2">{item.name}</Heading>
                         <Link className="font-medium text-[14px] mb-[16px]" to={`tel:${item.Phone.length ? item.Phone[0].phoneNumber : ""}`}>{item.Phone.length ? PhoneFormat(item?.Phone[0].phoneNumber) : "---"}</Link>
                         <div className="mt-[16px]">
                             <span className="font-semibold  text-[12px] mb-[4px] block">Jami nasiya:</span>
                             <Text classList="!text-[16px] text-[#F94D4D]">{FormatNumber(item.totalDebt)} so‘m</Text>
                         </div>
-                        <button onClick={() => changeStar(item.id)} className="absolute duration-300 hover:scale-[1.2] cursor-pointer top-[33px] right-[19px]"> {item.star ? <StartIconActive/> : <StarIcon />}  </button>
+                        <button onClick={(e) => {
+                            e.stopPropagation()
+                            changeStar(item.id)
+                        }} className="absolute duration-300 hover:scale-[1.2] cursor-pointer top-[33px] right-[19px]"> {item.star ? <StartIconActive/> : <StarIcon />}  </button>
                     </div>
                 ))}
             </div>

@@ -28,7 +28,6 @@ const Home = () => {
                 }
             })
     })
-
     return (
         <div className="containers !pt-[30px]">
             <div className="flex items-center justify-between mb-[38px]">
@@ -51,7 +50,7 @@ const Home = () => {
 
             <div className="rounded-[20px] relative bg-[#30AF49] mb-[31px] py-[18px] text-center">
                 <strong className="font-bold text-white mb-[14px]">
-                    {showLimit ? "*******" : isLoading ? "------" : FormatNumber(sellerData2?.totalDebt ? sellerData2.totalDebt : "")} so'm
+                    {showLimit ? "*******" : isLoading ? "------" : FormatNumber(sellerData2?.totalDebt ? sellerData2.totalDebt : "0")} so'm
                 </strong>
                 <Text classList="text-[14px] text-white">Umumiy nasiya:</Text>
                 <button

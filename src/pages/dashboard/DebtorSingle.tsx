@@ -9,6 +9,7 @@ import { useCookies } from "react-cookie"
 import type { SingleDebtorType } from "../../@types/Debtor"
 import { FormatNumber } from "../../hooks/FormatNumber"
 import { useState } from "react"
+import { FindMonth } from "../../hooks/FindMonth"
 
 const DebtorSingle = () => {
     const { id } = useParams()
@@ -56,7 +57,22 @@ const DebtorSingle = () => {
         },
     })
     //  Change star
+
+    // Delete part
+    const { mutate: deleteDebtor, isPending } = useMutation({
+        mutationFn: (id: string | undefined) => instance().delete(`/debtor/${id}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }),
+        onSuccess: () => {
+            setShow(false)
+            navigate(-1)
+            queryClient.invalidateQueries({ queryKey: ['debtor-list'] })
+        }
+    })
+    // Delete end
     // Created At Nov 1, 2024 14:51 Front formatda togirlash kerak
+    function showDebtorDebt(id:string){
+        queryClient.invalidateQueries({queryKey:['single-debt']})
+        navigate(`debt/${id}`)
+    }
 
     return (
         <div className="containers !mt-[34px] relative">
@@ -81,9 +97,9 @@ const DebtorSingle = () => {
             <Heading classList="!mb-[16px]" tag="h2">Faol nasiyalar</Heading>
             <div className="flex flex-col gap-[16px]">
                 {isLoading ? "Loading..." : SingleDebtor?.Debt.length == 0 ? emtyPage : SingleDebtor?.Debt.map(item => (
-                    <div key={item.id} className="p-4 rounded-[16px] bg-[#F6F6F6]">
+                    <div onClick={() => showDebtorDebt(item.id)} key={item.id} className="p-4 cursor-pointer rounded-[16px] bg-[#F6F6F6]">
                         <div className="flex items-center justify-between mb-[20px]">
-                            <Text classList="!font-medium !text-[14px]">Nov 1, 2024 14:51</Text>
+                            <Text classList="!font-medium !text-[14px]">{FindMonth(Number(item.date.split("T")[0].split("-")[1]) - 1)} {item.date.split("T")[0].split("-")[2]}, {item.date.split("T")[0].split("-")[0]} {item.date.split("T")[1].split(".")[0]}</Text>
                             <Text classList="!font-medium text-[#3478F7]">{FormatNumber(item.totalPayments)} so‘m</Text>
                         </div>
                         <Text classList="!font-normal !text-[12px]">Keyingi to‘lov: {item.nextPayment.date.split("T")[0]}</Text>
@@ -95,7 +111,12 @@ const DebtorSingle = () => {
                 ))}
             </div>
             <Button onClick={() => navigate("create-debt")} className="!text-[16px] !fixed !right-[calc(50%-185px)] !bottom-[80px] !font-medium !h-[48px]" type="primary" size="large" icon={<PlusOutlined />}>Qo'shish</Button>
-            <CustomModal show={show} setShow={setShow}>Salom</CustomModal>
+            <CustomModal show={show} setShow={setShow}>
+                <Heading tag="h2">O'chirmoqchisiz?</Heading>
+                <div className="flex items-center justify-between mt-3">
+                    <Button loading={isPending} onClick={() => deleteDebtor(id)} className="w-[100%] " size="large" type="primary" htmlType="button">Tasdiqlash</Button>
+                </div>
+            </CustomModal>
         </div>
     )
 }

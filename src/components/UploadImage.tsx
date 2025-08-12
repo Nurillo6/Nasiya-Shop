@@ -16,7 +16,7 @@ const getBase64 = (file: FileType): Promise<string> =>
   });
 
 const UploadImage: React.FC<{ imgNames: any, setImgNames: Dispatch<SetStateAction<string[]>> }> = ({ setImgNames, imgNames }) => {
-  const { id } = useParams()
+  const { id, debtId } = useParams()
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -47,7 +47,7 @@ const UploadImage: React.FC<{ imgNames: any, setImgNames: Dispatch<SetStateActio
     </button>
   );
   useEffect(() => {
-    if (id && imgNames.length > 0) {
+    if ((id || debtId) && imgNames.length > 0) {
       setFileList(imgNames.map((item: any) => {
         const data = {
           uid: item.id,
@@ -58,7 +58,7 @@ const UploadImage: React.FC<{ imgNames: any, setImgNames: Dispatch<SetStateActio
         return data
       }))
     }
-  }, [id, imgNames])
+  }, [id, imgNames, debtId])
 
   return (
     <>

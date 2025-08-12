@@ -21,7 +21,7 @@ const DebtorCreate = () => {
     const [phones, setPhones] = useState<Array<string>>([""]);
     const [imgNames, setImgNames] = useState<Array<string>>([])
     // values
-
+    
     // Images
 
     // Phone create 

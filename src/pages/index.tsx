@@ -3,6 +3,7 @@ import LoginHome from "./auth/Home"
 import Calendar from "./dashboard/Calendar"
 import DebtorCreate from "./dashboard/DebtorCreate"
 import DebtCreate from "./dashboard/DebtCreate"
+import DebtSingle from "./dashboard/DebtSingle"
 
 const Home = lazy(() => new Promise((resolve:any) => {
     return setTimeout(() => resolve(import("./dashboard/Home")), 1000)
@@ -17,4 +18,4 @@ const DebtorSingle = lazy(() => new Promise((resolve:any) => {
     return setTimeout(() => resolve(import("./dashboard/DebtorSingle")), 1000)
 }))
 
-export {Debtor, Login, Home, DebtorSingle,LoginHome, Calendar, DebtorCreate, DebtCreate}
+export {Debtor, Login, Home, DebtorSingle,LoginHome, Calendar, DebtorCreate, DebtCreate,DebtSingle}

@@ -39,8 +39,6 @@ const CustomCalendar: React.FC<{totalForMonth:number | string, setNowDate: Dispa
           useEffect(() => {
             setNowDate(value)
           },[])
-          console.log(value);
-          
           return (
             <>
               <div className="flex items-center justify-between !mt-[36px]">
