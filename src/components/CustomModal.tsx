@@ -1,5 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons'
-import React, { type Dispatch, type ReactNode, type SetStateAction } from 'react'
+import { type Dispatch, type ReactNode, type SetStateAction } from 'react'
 
 const CustomModal = ({children, show, setShow}:{children:ReactNode, show:boolean, setShow:Dispatch<SetStateAction<boolean>>}) => {
     return (

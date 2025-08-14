@@ -73,7 +73,7 @@ const DebtorSingle = () => {
         queryClient.invalidateQueries({queryKey:['single-debt']})
         navigate(`debt/${id}`)
     }
-
+    
     return (
         <div className="containers !mt-[34px] relative">
             <div className="flex items-center justify-between mb-[20px]">
@@ -102,10 +102,10 @@ const DebtorSingle = () => {
                             <Text classList="!font-medium !text-[14px]">{FindMonth(Number(item.date.split("T")[0].split("-")[1]) - 1)} {item.date.split("T")[0].split("-")[2]}, {item.date.split("T")[0].split("-")[0]} {item.date.split("T")[1].split(".")[0]}</Text>
                             <Text classList="!font-medium text-[#3478F7]">{FormatNumber(item.totalPayments)} so‘m</Text>
                         </div>
-                        <Text classList="!font-normal !text-[12px]">Keyingi to‘lov: {item.nextPayment.date.split("T")[0]}</Text>
-                        <strong className="block mb-[16px]"><span className="font-extrabold text-[#735CD8] text-[16px]">{FormatNumber(item.nextPayment.amount)}</span> <span className="font-normal text-[12px]">so‘m</span></strong>
+                        <Text classList="!font-normal !text-[12px]">Keyingi to‘lov: {item?.nextPayment?.date?.split("T")[0]}</Text>
+                        <strong className="block mb-[16px]"><span className="font-extrabold text-[#735CD8] text-[16px]">{FormatNumber(item?.nextPayment?.amount ? item?.nextPayment?.amount : 0)}</span> <span className="font-normal text-[12px]">so‘m</span></strong>
                         <div className="w-full h-[8px] rounded-full bg-[#CCCCCC] relative">
-                            <span style={{ width: `${findPrecent(item.Payment)}%` }} className={`h-[100%] absolute rounded-full bg-[#30AF49]`}></span>
+                            <span style={{ width: `${findPrecent(item?.Payment)}%` }} className={`h-[100%] absolute rounded-full bg-[#30AF49]`}></span>
                         </div>
                     </div>
                 ))}

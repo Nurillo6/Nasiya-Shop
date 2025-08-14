@@ -11,4 +11,6 @@ export const PATH = {
     debtUpdate:"/debtor/:id/debt/:debtId/update",
     debtSingle:"/debtor/:id/debt/:debtId",
     debtPayment:"/debtor/:id/debt/:debtId/payment",
+    notification:"/notification",
+    notificationMessage:"/notification/:debtorId",
 }

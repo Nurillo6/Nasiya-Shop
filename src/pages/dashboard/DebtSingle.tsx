@@ -21,13 +21,8 @@ const DebtSingle = () => {
 
     const { data: singleDebt, isLoading } = useQuery({
         queryKey: ['single-debt'],
-        queryFn: () => instance().get(`/debt/${debtId}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => {
-            if (res.data.data.note) {
-            }
-            return res.data.data
-        })
+        queryFn: () => instance().get(`/debt/${debtId}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => res.data.data)
     })
-
 
     // Delete part
     const { mutate: deleteDebtor, isPending } = useMutation({

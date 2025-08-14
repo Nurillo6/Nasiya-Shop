@@ -4,6 +4,7 @@ import Calendar from "./dashboard/Calendar"
 import DebtorCreate from "./dashboard/DebtorCreate"
 import DebtCreate from "./dashboard/DebtCreate"
 import DebtSingle from "./dashboard/DebtSingle"
+import DebtPayment from "./dashboard/DebtPayment"
 
 const Home = lazy(() => new Promise((resolve:any) => {
     return setTimeout(() => resolve(import("./dashboard/Home")), 1000)
@@ -17,5 +18,11 @@ const Debtor = lazy(() => new Promise((resolve:any) => {
 const DebtorSingle = lazy(() => new Promise((resolve:any) => {
     return setTimeout(() => resolve(import("./dashboard/DebtorSingle")), 1000)
 }))
+const Notification = lazy(() => new Promise((resolve:any) => {
+    return setTimeout(() => resolve(import("./dashboard/report/Notification")), 1000)
+}))
+const Message = lazy(() => new Promise((resolve:any) => {
+    return setTimeout(() => resolve(import("./dashboard/report/Message")), 1000)
+}))
 
-export {Debtor, Login, Home, DebtorSingle,LoginHome, Calendar, DebtorCreate, DebtCreate,DebtSingle}
+export {Debtor, Login, Home, DebtorSingle, Notification,LoginHome, Calendar, DebtorCreate, DebtCreate,DebtSingle,DebtPayment, Message }

@@ -1,3 +1,13 @@
+export interface DebtPaymentType {
+  id: string;
+  debtId: string;
+  amount: number;
+  month: number;
+  date: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 export interface DebtType {
   id: string;
   productName: string;
@@ -9,5 +19,5 @@ export interface DebtType {
   sellerId: string;
   createdAt: string;
   updatedAt: string;
-  Payment: Array<{ amout: number }>;
+  Payment: Array<DebtPaymentType>;
 }

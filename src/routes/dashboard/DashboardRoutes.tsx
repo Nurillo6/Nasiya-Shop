@@ -1,10 +1,9 @@
+import { Suspense } from "react"
 import { Route, Routes } from "react-router-dom"
 import { PATH } from "../../hooks/Path"
-import { Calendar, Debtor, DebtorCreate, Home, DebtorSingle, DebtCreate, DebtSingle } from "../../pages"
+import { Calendar, Debtor, DebtorCreate, Home, DebtorSingle, DebtCreate, DebtSingle, Notification, DebtPayment, Message } from "../../pages"
 import DashboardLayout from "../../provider/DashboardLayout"
-import { Suspense } from "react"
 import { PageLoading } from "../../components"
-import DebtPayment from "../../pages/dashboard/DebtPayment"
 
 const DashboardRoutes = () => {
   return (
@@ -20,6 +19,8 @@ const DashboardRoutes = () => {
         <Route path={PATH.debtUpdate} element={<DebtCreate/>}/>
         <Route path={PATH.debtSingle} element={<DebtSingle/>}/>
         <Route path={PATH.debtPayment} element={<DebtPayment/>}/>
+        <Route path={PATH.notification} element={<Suspense fallback={<PageLoading/>}><Notification/></Suspense>}/>
+        <Route path={PATH.notificationMessage} element={<Suspense fallback={<PageLoading/>}><Message/></Suspense>}/>
       </Routes>
     </DashboardLayout>
   )

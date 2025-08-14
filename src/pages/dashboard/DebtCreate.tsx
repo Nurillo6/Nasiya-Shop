@@ -103,7 +103,7 @@ const DebtCreate = () => {
     <div className="containers !mt-[30px]">
       <div className="flex w-[50%] !mb-[26px] justify-between items-center ">
         <button onClick={() => navigate(-1)} type="button" className="cursor-pointer duration-300 hover:scale-[1.2]"> <BackIcon /> </button>
-        <Heading tag="h2" classList="!text-[18px]">Mijoz {debtId ? "tahrirlash" : "yaratish"}</Heading>
+        <Heading tag="h2" classList="!text-[18px]">Nasiya {debtId ? "tahrirlash" : "yaratish"}</Heading>
       </div>
       <form onSubmit={createDebtSubmit} autoComplete="off">
         <label className=" block">
