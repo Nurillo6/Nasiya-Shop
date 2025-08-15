@@ -5,18 +5,18 @@ import { Button, Calendar } from 'antd';
 import dayLocaleData from 'dayjs/plugin/localeData';
 import Heading from './Heading';
 import Text from './Text';
-import { FormatNumber } from '../hooks/FormatNumber';
 import { ArrowIcon } from '../assets/icons';
-import { FindMonth } from '../hooks/FindMonth';
+import { FindMonth, FormatNumber } from '../hooks';
 dayjs.extend(dayLocaleData);
-
+interface PageType {
+  totalForMonth: number | string,
+  setNowDate: Dispatch<SetStateAction<dayjs.Dayjs | undefined>>,
+  nowDate: dayjs.Dayjs | undefined
+}
 const wrapperStyle: React.CSSProperties = {
   width: "100%",
 };
-
-const CustomCalendar: React.FC<{totalForMonth:number | string, setNowDate: Dispatch<SetStateAction<dayjs.Dayjs | undefined>>, nowDate: dayjs.Dayjs | undefined }> = ({ nowDate, setNowDate, totalForMonth }) => {
- 
-
+const CustomCalendar: React.FC<PageType> = ({ nowDate, setNowDate, totalForMonth }) => {
   function handleChooseDay(value: any) {
     setNowDate(value);
   }
@@ -28,7 +28,6 @@ const CustomCalendar: React.FC<{totalForMonth:number | string, setNowDate: Dispa
     const newMonth = value.subtract(1, 'month');
     onChange(newMonth);
   }
-
   return (
     <div style={wrapperStyle}>
       <Calendar
@@ -38,7 +37,7 @@ const CustomCalendar: React.FC<{totalForMonth:number | string, setNowDate: Dispa
         headerRender={({ value, onChange }) => {
           useEffect(() => {
             setNowDate(value)
-          },[])
+          }, [])
           return (
             <>
               <div className="flex items-center justify-between !mt-[36px]">

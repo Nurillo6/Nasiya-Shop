@@ -5,12 +5,10 @@ import { useState } from "react";
 import { HistoryPayment, NotificationMessage } from "../../../modules";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { NotificationType } from "../../../@types/NotificationType";
-import { instance } from "../../../hooks/instance";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import { PhoneFormat } from "../../../hooks/PhoneFormat";
 import NotificationMessageNotFound from "../../../modules/notification/NotificationMessageNotFound";
-import { FindMonth } from "../../../hooks/FindMonth";
+import { FindMonth, instance, PhoneFormat } from "../../../hooks";
 
 const Notification = () => {
   const [showMessage, setShowMessage] = useState<"Xabarlar tarixi" | "To‘lovlar tarixi">("Xabarlar tarixi")

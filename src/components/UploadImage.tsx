@@ -2,8 +2,8 @@ import React, { useEffect, useState, type Dispatch, type SetStateAction } from '
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload } from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
-import { API } from '../hooks/getEnv';
 import { useParams } from 'react-router-dom';
+import { API } from '../hooks';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 

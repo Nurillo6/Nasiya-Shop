@@ -2,11 +2,17 @@ import { Checkbox } from 'antd'
 import Text from './Text'
 import { useEffect, useState, type Dispatch, type FC, type SetStateAction } from 'react'
 import type { DebtPaymentType } from '../@types/Debt'
-import { FormatNumber } from '../hooks/FormatNumber'
+import { FormatNumber } from '../hooks'
 
-const AnyPaymentItem: FC<{setTotalPay:Dispatch<SetStateAction<number[]>>, payAll:boolean, payMonth: number[], item: DebtPaymentType, setPayMonth: Dispatch<SetStateAction<number[]>> }> = ({payAll,setPayMonth, item, setTotalPay }) => {
+interface PageType {
+    setTotalPay: Dispatch<SetStateAction<number[]>>,
+    payAll: boolean,
+    payMonth: number[],
+    item: DebtPaymentType,
+    setPayMonth: Dispatch<SetStateAction<number[]>>
+}
+const AnyPaymentItem: FC<PageType> = ({ payAll, setPayMonth, item, setTotalPay }) => {
     const [check, setCheck] = useState<boolean>(false)
-
     function handleCheck() {
         setCheck(prev => !prev);
         setPayMonth((prev: number[]) => {
@@ -28,7 +34,7 @@ const AnyPaymentItem: FC<{setTotalPay:Dispatch<SetStateAction<number[]>>, payAll
     }
     useEffect(() => {
         setCheck(payAll)
-    },[payAll])
+    }, [payAll])
     return (
         <li onClick={handleCheck} className="py-[16px] cursor-pointer border-b-[1px] flex items-center justify-between border-[#ECECEC]">
             <div>

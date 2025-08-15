@@ -1,5 +1,5 @@
 
-export const PATH = {
+const PATH = {
     main:"/",
     login:"/login",
     calendar:"/debt/date",
@@ -15,3 +15,4 @@ export const PATH = {
     notificationMessage:"/notification/:debtorId",
     settings:"/settings",
 }
+export default PATH

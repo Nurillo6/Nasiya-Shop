@@ -4,13 +4,11 @@ import { CustomModal, Heading, PageLoading, Text } from "../../components"
 import { MoreOutlined } from "@ant-design/icons"
 import { Button, DatePicker, Input, Popover, Select } from "antd"
 import { termList } from "./DebtCreate"
-import { API } from "../../hooks/getEnv"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { instance } from "../../hooks/instance"
 import { useCookies } from "react-cookie"
 import dayjs from "dayjs"
-import { FormatNumber } from "../../hooks/FormatNumber"
 import { useState } from "react"
+import { API, FormatNumber, instance } from "../../hooks"
 
 const DebtSingle = () => {
     const navigate = useNavigate()

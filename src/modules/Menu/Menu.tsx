@@ -1,6 +1,6 @@
 import { ClientIcon, HomeIcon, ReportIcon, SettingsIcon } from "../../assets/icons"
 import { MenuItem } from "../../components"
-import { PATH } from "../../hooks/Path"
+import { PATH } from "../../hooks"
 
 const Menu = () => {
   return (
@@ -10,7 +10,7 @@ const Menu = () => {
           <MenuItem to={PATH.main} title="Asosiy" icon={<HomeIcon classList="!mx-auto !mb-[2px]" />} />
           <MenuItem to={PATH.debtor} title="Mijozlar" icon={<ClientIcon classList="!mx-auto !mb-[2px]" />} />
           <MenuItem to={PATH.notification} title="Hisobot" icon={<ReportIcon classList="!mx-auto !mb-[2px]" />} />
-          <MenuItem to="/settings" title="Sozlama" icon={<SettingsIcon classList="!mx-auto !mb-[2px]" />} />
+          <MenuItem to={PATH.settings} title="Sozlama" icon={<SettingsIcon classList="!mx-auto !mb-[2px]" />} />
         </div>
       </div>
     </div>

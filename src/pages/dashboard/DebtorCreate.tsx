@@ -4,9 +4,9 @@ import { Heading, Text, UploadImage } from "../../components"
 import { useState, type FormEvent } from "react"
 import { useCookies } from "react-cookie"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { instance } from "../../hooks/instance"
 import { toast } from "react-hot-toast"
 import { useNavigate, useParams } from "react-router-dom"
+import { instance } from "../../hooks"
 
 const DebtorCreate = () => {
     const { id } = useParams()

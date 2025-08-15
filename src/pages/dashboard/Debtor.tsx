@@ -3,15 +3,12 @@ import { CreateDebtorIcon, SearchIcon, SortIcon, StarIcon, StartIconActive } fro
 import { Heading, Text } from "../../components"
 import { Link, useNavigate } from "react-router-dom"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { instance } from "../../hooks/instance"
 import { useCookies } from "react-cookie"
 import type { ClientDebtor } from "../../@types/ClientDebtor"
-import { FormatNumber } from "../../hooks/FormatNumber"
-import { PhoneFormat } from "../../hooks/PhoneFormat"
 import { useEffect, useState, type FormEvent } from "react"
 import debounce from "../../hooks/debounce"
 import type { CheckboxGroupProps } from "antd/es/checkbox"
-import { PATH } from "../../hooks/Path"
+import { FormatNumber, instance, PATH, PhoneFormat } from "../../hooks"
 
 
 const Debtor = () => {

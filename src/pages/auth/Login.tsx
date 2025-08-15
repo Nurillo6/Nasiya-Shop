@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom"
 import { Logo } from "../../assets/images"
-import Heading from "../../components/Heading"
-import Text from "../../components/Text"
+import {Heading, Text} from "../../components"
 import { Button, Input } from "antd"
 import { LoginIcon, PasswordIcon } from "../../assets/icons"
 import { useFormik } from "formik"
 import { LoginSchema } from "../../validation/Login"
 import { useState } from "react"
-import { Login } from "../../service/auth"
 import { useCookies } from "react-cookie"
+import { Login } from "../../service/auth"
 
 const login = () => {
   const [_cookies, setCookies] = useCookies(['token']);

@@ -1,16 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { CustomModal, Heading, Text } from "../../components"
+import { AnyPaymentItem, CustomModal, Heading, SuccessModal, Text } from "../../components"
 import { ArrowIcon, BackIcon } from "../../assets/icons"
 import { useState, type FormEvent } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { instance } from "../../hooks/instance"
 import { useCookies } from "react-cookie"
-import { FindMonth } from "../../hooks/FindMonth"
 import type { DebtType } from "../../@types/Debt"
-import { FormatNumber } from "../../hooks/FormatNumber"
 import { Button, Input } from "antd"
-import SuccessModal from "../../components/SuccessModal"
-import AnyPaymentItem from "../../components/AnyPaymentItem"
+import { FindMonth, FormatNumber, instance } from "../../hooks"
 
 const DebtPayment = () => {
     const { debtId } = useParams()

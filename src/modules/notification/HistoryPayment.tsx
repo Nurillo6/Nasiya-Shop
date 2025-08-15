@@ -1,11 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
-import { instance } from "../../hooks/instance";
 import type { PaymentHistoryType } from "../../@types/NotificationType";
 import { Text } from "../../components";
-import { PhoneFormat } from "../../hooks/PhoneFormat";
-import { FormatNumber } from "../../hooks/FormatNumber";
 import NotificationMessageNotFound from "./NotificationMessageNotFound";
+import { FormatNumber, instance, PhoneFormat } from "../../hooks";
 
 const HistoryPayment = () => {
   const [cookies] = useCookies(['token']);

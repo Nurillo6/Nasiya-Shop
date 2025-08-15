@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom"
-import { PATH } from "../../hooks/Path"
 import { Login, LoginHome } from "../../pages"
 import { Suspense } from "react"
 import PageLoading from "../../components/PageLoading"
+import { PATH } from "../../hooks"
 
 const AuthRoute = () => {
   return (

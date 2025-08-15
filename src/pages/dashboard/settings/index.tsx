@@ -5,9 +5,10 @@ import { useState } from "react";
 import { LogOutIcon } from "../../../assets/images";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
+import { instance } from "../../../hooks";
 
 const Settings = () => {
-  const [, , removeCookie] = useCookies(['token']);
+  const [cookies, , removeCookie] = useCookies(['token']);
   const [openModal, setOpenModal] = useState<boolean>(false)
   const navigate = useNavigate()
   const settingsList = [
@@ -37,8 +38,10 @@ const Settings = () => {
     }
   ]
   function handleLogOut() {
-    removeCookie("token")
-    navigate("/")
+    instance().post("/seller/logout", {}, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(() => {
+      removeCookie("token")
+      navigate("/")
+    })
   }
   return (
     <>

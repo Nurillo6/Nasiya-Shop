@@ -4,12 +4,10 @@ import { CustomModal, Heading, Text } from "../../components"
 import { MoreOutlined, PlusOutlined } from "@ant-design/icons"
 import { Button, Popover } from "antd"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { instance } from "../../hooks/instance"
 import { useCookies } from "react-cookie"
 import type { SingleDebtorType } from "../../@types/Debtor"
-import { FormatNumber } from "../../hooks/FormatNumber"
 import { useState } from "react"
-import { FindMonth } from "../../hooks/FindMonth"
+import { FindMonth, FormatNumber, instance } from "../../hooks"
 
 const DebtorSingle = () => {
     const { id } = useParams()

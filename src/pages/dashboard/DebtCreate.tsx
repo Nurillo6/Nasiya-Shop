@@ -5,9 +5,9 @@ import { Button, Checkbox, DatePicker, Input, Select, type CheckboxChangeEvent }
 import { useState, type FormEvent } from "react"
 import dayjs from "dayjs"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { instance } from "../../hooks/instance"
 import { useCookies } from "react-cookie"
 import toast from "react-hot-toast"
+import { instance } from "../../hooks"
 
 export const termList = [
   { value: 1, label: "1 oy" },

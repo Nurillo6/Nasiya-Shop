@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
-import { PATH } from "../../hooks/Path"
 import { useEffect } from "react"
+import { PATH } from "../../hooks"
 
 const Home = () => {
   const navigate = useNavigate()

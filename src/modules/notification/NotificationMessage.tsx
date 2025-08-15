@@ -1,12 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
-import { instance } from "../../hooks/instance";
 import type { NotificationType } from "../../@types/NotificationType";
 import { Text } from "../../components";
-import { PhoneFormat } from "../../hooks/PhoneFormat";
-import { FindMonth } from "../../hooks/FindMonth";
 import NotificationMessageNotFound from "./NotificationMessageNotFound";
 import { useNavigate } from "react-router-dom";
+import { FindMonth, instance, PhoneFormat } from "../../hooks";
 
 const NotificationMessage = () => {
   const [cookies] = useCookies(['token']);

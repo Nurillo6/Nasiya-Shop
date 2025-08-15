@@ -5,10 +5,9 @@ import { BackIcon, CreateExampleIcon, SendMessageIcon } from "../../../assets/ic
 import { Button, Popover } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { instance } from "../../../hooks/instance";
 import type { MessageType } from "../../../@types/NotificationType";
-import { FindMonth } from "../../../hooks/FindMonth";
 import { useState, type FormEvent } from "react";
+import { FindMonth, instance } from "../../../hooks";
 
 const NotificationMessage = () => {
     const { debtorId } = useParams()

@@ -3,12 +3,10 @@ import { BackIcon } from "../../assets/icons"
 import { CustomCalendar, Heading, Text } from "../../components"
 import { useState } from "react";
 import type dayjs from "dayjs";
-import { FindMonth } from "../../hooks/FindMonth";
 import { useQuery } from "@tanstack/react-query";
-import { instance } from "../../hooks/instance";
 import { useCookies } from "react-cookie";
 import type { CalendarType, CalendarUniqForDayType } from "../../@types/CalendarDebt";
-import { FormatNumber } from "../../hooks/FormatNumber";
+import { FindMonth, FormatNumber, instance } from "../../hooks";
 
 const Calendar = () => {
     const [nowDate, setNowDate] = useState<dayjs.Dayjs | undefined>();

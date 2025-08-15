@@ -1,2 +1,4 @@
 
-export const API = import.meta.env.VITE_API
+const API = import.meta.env.VITE_API
+
+export default API

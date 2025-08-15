@@ -1,9 +1,9 @@
 import { Suspense } from "react"
 import { Route, Routes } from "react-router-dom"
-import { PATH } from "../../hooks/Path"
 import { Calendar, Debtor, DebtorCreate, Home, DebtorSingle, DebtCreate, DebtSingle, Notification, DebtPayment, Message, Settings } from "../../pages"
 import DashboardLayout from "../../provider/DashboardLayout"
 import { PageLoading } from "../../components"
+import { PATH } from "../../hooks"
 
 const DashboardRoutes = () => {
   return (
