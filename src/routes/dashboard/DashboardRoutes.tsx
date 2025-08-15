@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import { Route, Routes } from "react-router-dom"
 import { PATH } from "../../hooks/Path"
-import { Calendar, Debtor, DebtorCreate, Home, DebtorSingle, DebtCreate, DebtSingle, Notification, DebtPayment, Message } from "../../pages"
+import { Calendar, Debtor, DebtorCreate, Home, DebtorSingle, DebtCreate, DebtSingle, Notification, DebtPayment, Message, Settings } from "../../pages"
 import DashboardLayout from "../../provider/DashboardLayout"
 import { PageLoading } from "../../components"
 
@@ -21,6 +21,7 @@ const DashboardRoutes = () => {
         <Route path={PATH.debtPayment} element={<DebtPayment/>}/>
         <Route path={PATH.notification} element={<Suspense fallback={<PageLoading/>}><Notification/></Suspense>}/>
         <Route path={PATH.notificationMessage} element={<Suspense fallback={<PageLoading/>}><Message/></Suspense>}/>
+        <Route path={PATH.settings} element={<Settings/>}/>
       </Routes>
     </DashboardLayout>
   )

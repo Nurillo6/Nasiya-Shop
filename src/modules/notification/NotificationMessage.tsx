@@ -15,7 +15,7 @@ const NotificationMessage = () => {
   // Get All Messages
   const { data = [], isLoading } = useQuery<NotificationType[]>({
     queryKey: ['messages'],
-    queryFn: () => instance().get("/notification", { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => res.data.data)
+    queryFn: () => instance().get("/notification", { headers: { "Authorization": `Bearer ${cookies.token}` }, params:{get:"Sended"}}).then(res => res.data.data.notifications)
   })
   // Get All Messages
   return (
