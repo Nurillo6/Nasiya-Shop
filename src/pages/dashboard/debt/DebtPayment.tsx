@@ -1,32 +1,31 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { AnyPaymentItem, CustomModal, Heading, SuccessModal, Text } from "../../components"
-import { ArrowIcon, BackIcon } from "../../assets/icons"
+import { AnyPaymentItem, CustomModal, Heading, SuccessModal, Text } from "../../../components"
+import { ArrowIcon, BackIcon } from "../../../assets/icons"
 import { useState, type FormEvent } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useCookies } from "react-cookie"
-import type { DebtType } from "../../@types/Debt"
+import type { DebtType } from "../../../@types/Debt"
 import { Button, Input } from "antd"
-import { FindMonth, FormatNumber, instance } from "../../hooks"
+import { FindMonth, FormatNumber, instance } from "../../../hooks"
 
 const DebtPayment = () => {
     const { debtId } = useParams()
     const navigate = useNavigate()
-    const [cookies] = useCookies(['token']);
-    const [showSuccess, setShowSuccess] = useState<boolean>(false)
     const queryClient = useQueryClient()
 
+    
+    const [showSuccess, setShowSuccess] = useState<boolean>(false)
     const [showForMonthPayment, setShowForMonthPayment] = useState<boolean>(false)
     const [showAnyPayment, setShowAnyPayment] = useState<boolean>(false)
     const [showChooseDatePayment, setShowChooseDatePayment] = useState<boolean>(false)
 
     const { data: debtData } = useQuery<DebtType>({
         queryKey: ['single-debt'],
-        queryFn: () => instance().get(`/debt/${debtId}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => res.data.data)
+        queryFn: () => instance.get(`/debt/${debtId}`).then(res => res.data.data)
     })
 
     // one month
     const { mutate: oneMonthMutate, isPending: oneMonthPenning } = useMutation({
-        mutationFn: (data: { debtId: string | undefined }) => instance().post("/debt/oneMonth", data, { headers: { "Authorization": `Bearer ${cookies.token}` } }),
+        mutationFn: (data: { debtId: string | undefined }) => instance.post("/debt/oneMonth", data),
         onSuccess: () => {
             setShowSuccess(true)
             queryClient.invalidateQueries({ queryKey: ['single-debt'] })
@@ -40,7 +39,7 @@ const DebtPayment = () => {
     // one month
     // any payment
     const { mutate: oneAnyPayment, isPending: anyPaymenPenning } = useMutation({
-        mutationFn: (data: { debtId: string | undefined, amount: number }) => instance().post("/debt/anyQuantity", data, { headers: { "Authorization": `Bearer ${cookies.token}` } }),
+        mutationFn: (data: { debtId: string | undefined, amount: number }) => instance.post("/debt/anyQuantity", data),
         onSuccess: () => {
             setShowSuccess(true)
             queryClient.invalidateQueries({ queryKey: ['single-debt'] })
@@ -60,7 +59,7 @@ const DebtPayment = () => {
     const [payAll, setPayAll] = useState(false)
     const [payMonth, setPayMonth] = useState<Array<number>>([])
     const { mutate: oneManyPayment, isPending: manyPaymenPenning } = useMutation({
-        mutationFn: (data: { debtId: string | undefined, months: number[] }) => instance().post("/debt/manyMonth", data, { headers: { "Authorization": `Bearer ${cookies.token}` } }),
+        mutationFn: (data: { debtId: string | undefined, months: number[] }) => instance.post("/debt/manyMonth", data),
         onSuccess: () => {
             setShowSuccess(true)
             queryClient.invalidateQueries({ queryKey: ['single-debt'] })

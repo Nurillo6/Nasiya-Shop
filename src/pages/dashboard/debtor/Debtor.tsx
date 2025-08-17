@@ -1,34 +1,24 @@
 import { Button, Input, Popover, Radio, Select } from "antd"
-import { CreateDebtorIcon, SearchIcon, SortIcon, StarIcon, StartIconActive } from "../../assets/icons"
-import { Heading, Text } from "../../components"
+import { CreateDebtorIcon, SearchIcon, SortIcon, StarIcon, StartIconActive } from "../../../assets/icons"
+import { DebtorListSkeleton, Heading, Text } from "../../../components"
 import { Link, useNavigate } from "react-router-dom"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useCookies } from "react-cookie"
-import type { ClientDebtor } from "../../@types/ClientDebtor"
+import type { ClientDebtor } from "../../../@types/ClientDebtor"
 import { useEffect, useState, type FormEvent } from "react"
-import debounce from "../../hooks/debounce"
+import debounce from "../../../hooks/debounce"
 import type { CheckboxGroupProps } from "antd/es/checkbox"
-import { FormatNumber, instance, PATH, PhoneFormat } from "../../hooks"
+import { FormatNumber, instance, PATH, PhoneFormat } from "../../../hooks"
 
 
 const Debtor = () => {
     const navigate = useNavigate()
-    const [cookies, , removeCookies] = useCookies(['token']);
     const queryClient = useQueryClient()
-
     const [params, setParams] = useState<{ search?: string, sortOrder?: "asc" | "desc", sortBy?: "createdAt" | "name" }>({})
 
     // Search
     const [searchValue, setSearchValue] = useState<string>("")
     const search = debounce(searchValue, 300)
-    function handleSearach(value: string | undefined) {
-        if (value) {
-            setSearchValue(value)
-        }
-        else {
-            setSearchValue(" ")
-        }
-    }
+    const handleSearach = (value: string | undefined) => value ? setSearchValue(value) : setSearchValue(" ")
     // Search
 
     // Sort
@@ -44,14 +34,8 @@ const Debtor = () => {
                 defaultValue={"createdAt"}
                 options={
                     [
-                        {
-                            label: "Sana bo'yicha",
-                            value: "createdAt"
-                        },
-                        {
-                            label: "Ism bo'yicha",
-                            value: "name"
-                        },
+                        {label: "Sana bo'yicha",value: "createdAt"},
+                        {label: "Ism bo'yicha",value: "name"},
                     ]
                 }
             />
@@ -73,28 +57,20 @@ const Debtor = () => {
 
     //  Change star
     const {mutate:changeStar} = useMutation({
-        mutationFn:(id:string) => instance().patch(`/debtor/star/${id}`, {}, {headers:{"Authorization":`Bearer ${cookies.token}`}}),
-        onSuccess:() => {
-            queryClient.invalidateQueries({queryKey:['debtor-list']})
-        },
+        mutationFn:(id:string) => instance.patch(`/debtor/star/${id}`),
+        onSuccess:() => queryClient.invalidateQueries({queryKey:['debtor-list']}),
     })
     //  Change star
 
     // Get All
     const { data: debtorList = [], isLoading } = useQuery<ClientDebtor[]>({
         queryKey: ['debtor-list', params],
-        queryFn: () => instance().get("/debtor", { params, headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => res.data.data).catch(err => {
-            if (err.response.status == 401) {
-                removeCookies("token")
-                location.pathname = "/"
-            }
-        })
+        queryFn: () => instance.get("/debtor", { params }).then(res => res.data.data)
     })
     // Get All
     function handleSingleCreate(id:string){
         queryClient.invalidateQueries({queryKey:['single-debtor']})
         navigate(`${id}`)
-       
     }
     return (
         <div className="containers relative">
@@ -105,7 +81,7 @@ const Debtor = () => {
                 </Popover>
             </div>
             <div className="flex flex-col gap-[16px]">
-                {isLoading ? "laading..." : debtorList.map((item: ClientDebtor) => (
+                {isLoading ? <DebtorListSkeleton/> : debtorList.map((item: ClientDebtor) => (
                     <div onClick={() => handleSingleCreate(item.id)} id="debtor-wrapper" key={item.id} className="p-[16px] cursor-pointer duration-300 hover:scale-[1.01] relative rounded-[16px] border-[1px] border-[#ECECEC] bg-[#F6F6F6]">
                         <Heading classList="!text-[24px] mb-[4px]" tag="h2">{item.name}</Heading>
                         <Link className="font-medium text-[14px] mb-[16px]" to={`tel:${item.Phone.length ? item.Phone[0].phoneNumber : ""}`}>{item.Phone.length ? PhoneFormat(item?.Phone[0].phoneNumber) : "---"}</Link>

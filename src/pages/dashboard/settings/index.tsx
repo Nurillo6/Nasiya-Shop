@@ -6,9 +6,10 @@ import { LogOutIcon } from "../../../assets/images";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../../hooks";
+import { useMutation } from "@tanstack/react-query";
 
 const Settings = () => {
-  const [cookies, , removeCookie] = useCookies(['token']);
+  const [, , removeCookie] = useCookies(['accessToken', "refreshToken"]);
   const [openModal, setOpenModal] = useState<boolean>(false)
   const navigate = useNavigate()
   const settingsList = [
@@ -37,12 +38,15 @@ const Settings = () => {
       children: []
     }
   ]
-  function handleLogOut() {
-    instance().post("/seller/logout", {}, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(() => {
-      removeCookie("token")
+  const { mutate: logOut, isPending } = useMutation({
+    mutationFn: () => instance.post("/seller/logout"),
+    onSuccess: () => {
       navigate("/")
-    })
-  }
+      removeCookie("accessToken")
+      removeCookie("refreshToken")
+    }
+  })
+
   return (
     <>
       <div className="containers !mt-[30px]">
@@ -73,7 +77,7 @@ const Settings = () => {
           <Heading classList="!font-bold !text-[18px]" tag="h2">Hisobdan chiqish</Heading>
           <Text classList="!font-normal !text-[14px] mb-[49px]">Siz haqiqatan hisobdan chiqmoqchimisiz?</Text>
           <div className="flex items-center justify-between">
-            <Button onClick={() => handleLogOut()} type="default" size="large" className="!h-[42px] !text-[14px] !font-bold !text-[#3478F7] !w-[48%] flex items-center justify-center">Ha, chiqish</Button>
+            <Button loading={isPending} onClick={() => logOut()} type="default" size="large" className="!h-[42px] !text-[14px] !font-bold !text-[#3478F7] !w-[48%] flex items-center justify-center">Ha, chiqish</Button>
             <Button onClick={() => setOpenModal(false)} type="primary" size="large" className="!h-[42px] !text-[14px] !font-bold !w-[48%] flex items-center !bg-[#F94D4D] justify-center">Bekor qilish</Button>
           </div>
         </div>

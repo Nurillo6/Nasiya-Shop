@@ -33,7 +33,6 @@ const HomeSkeleton = () => {
                 <SkeletonButton active className="!w-[90%]" size="small" />
             </div>
         </div>
-
     )
 }
 

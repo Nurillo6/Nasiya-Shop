@@ -1,29 +1,23 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { BackIcon, StarIcon, StartIconActive } from "../../assets/icons"
-import { CustomModal, Heading, Text } from "../../components"
+import { BackIcon, StarIcon, StartIconActive } from "../../../assets/icons"
+import { CustomModal, DebtorListSkeleton, Heading, Text } from "../../../components"
 import { MoreOutlined, PlusOutlined } from "@ant-design/icons"
 import { Button, Popover } from "antd"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useCookies } from "react-cookie"
-import type { SingleDebtorType } from "../../@types/Debtor"
+import type { SingleDebtorType } from "../../../@types/Debtor"
 import { useState } from "react"
-import { FindMonth, FormatNumber, instance } from "../../hooks"
+import { FindMonth, FormatNumber, instance } from "../../../hooks"
+import SkeletonButton from "antd/es/skeleton/Button"
 
 const DebtorSingle = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
-    const [cookies, , removeCookies] = useCookies(['token']);
     const [show, setShow] = useState(false)
 
     const { data: SingleDebtor, isLoading } = useQuery<SingleDebtorType>({
         queryKey: ['single-debtor'],
-        queryFn: () => instance().get(`/debtor/${id}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => res.data.data).catch(err => {
-            if (err.response.status == 401) {
-                removeCookies("token")
-                location.pathname = "/"
-            }
-        })
+        queryFn: () => instance.get(`/debtor/${id}`).then(res => res.data.data)
     })
 
     function handleUpdateBtnClick() {
@@ -49,16 +43,14 @@ const DebtorSingle = () => {
     }
     //  Change star
     const { mutate: changeStar } = useMutation({
-        mutationFn: (id: string | undefined) => instance().patch(`/debtor/star/${id}`, {}, { headers: { "Authorization": `Bearer ${cookies.token}` } }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['single-debtor'] })
-        },
+        mutationFn: (id: string | undefined) => instance.patch(`/debtor/star/${id}`),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['single-debtor'] }),
     })
     //  Change star
 
     // Delete part
     const { mutate: deleteDebtor, isPending } = useMutation({
-        mutationFn: (id: string | undefined) => instance().delete(`/debtor/${id}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }),
+        mutationFn: (id: string | undefined) => instance.delete(`/debtor/${id}`),
         onSuccess: () => {
             setShow(false)
             navigate(-1)
@@ -66,18 +58,20 @@ const DebtorSingle = () => {
         }
     })
     // Delete end
-    // Created At Nov 1, 2024 14:51 Front formatda togirlash kerak
-    function showDebtorDebt(id:string){
-        queryClient.invalidateQueries({queryKey:['single-debt']})
+
+    function showDebtorDebt(id: string) {
+        queryClient.invalidateQueries({ queryKey: ['single-debt'] })
         navigate(`debt/${id}`)
     }
-    
+
     return (
         <div className="containers !mt-[34px] relative">
             <div className="flex items-center justify-between mb-[20px]">
                 <div className="flex items-center gap-[12px]">
                     <button className="cursor-pointer" onClick={() => navigate(-1)}> <BackIcon /> </button>
-                    <Heading tag="h2">{isLoading ? "----" : SingleDebtor?.name}</Heading>
+                    <Heading classList="!flex !items-center" tag="h2">{isLoading ? <div className="w-[216px] h-[15px]">
+                        <SkeletonButton active className="!w-full !h-full !rounded-[20px] !overflow-hidden" />
+                    </div> : SingleDebtor?.name}</Heading>
                 </div>
                 <div className="flex items-center gap-[14px]">
                     <button onClick={() => changeStar(id)} className="duration-300 debtor-single hover:scale-[1.2] cursor-pointer"> {SingleDebtor?.star ? <StartIconActive /> : <StarIcon />}  </button>
@@ -88,13 +82,15 @@ const DebtorSingle = () => {
             </div>
             <div className="rounded-[20px] bg-[#BBD2FC] py-[18px] pl-[18px] !mb-[24px]">
                 <Text classList="!text-[12px]">Umumiy nasiya:</Text>
-                <strong className="font-bold text-[#000] text-[22px]">
-                    {FormatNumber(SingleDebtor?.totalAmount ? SingleDebtor?.totalAmount : "0")} so‘m
+                <strong className="font-bold text-[#000] text-[22px] flex items-center gap-[5px]">
+                    {isLoading ? <div className="w-[159px] h-[28px]">
+                        <SkeletonButton active className="!w-full !h-full !rounded-[20px] !overflow-hidden" />
+                    </div> : FormatNumber(SingleDebtor?.totalAmount ? SingleDebtor?.totalAmount : "0")} <span>so‘m</span>
                 </strong>
             </div>
             <Heading classList="!mb-[16px]" tag="h2">Faol nasiyalar</Heading>
             <div className="flex flex-col gap-[16px]">
-                {isLoading ? "Loading..." : SingleDebtor?.Debt.length == 0 ? emtyPage : SingleDebtor?.Debt.map(item => (
+                {isLoading ? <DebtorListSkeleton/> : SingleDebtor?.Debt.length == 0 ? emtyPage : SingleDebtor?.Debt.map(item => (
                     <div onClick={() => showDebtorDebt(item.id)} key={item.id} className="p-4 cursor-pointer rounded-[16px] bg-[#F6F6F6]">
                         <div className="flex items-center justify-between mb-[20px]">
                             <Text classList="!font-medium !text-[14px]">{FindMonth(Number(item.date.split("T")[0].split("-")[1]) - 1)} {item.date.split("T")[0].split("-")[2]}, {item.date.split("T")[0].split("-")[0]} {item.date.split("T")[1].split(".")[0]}</Text>

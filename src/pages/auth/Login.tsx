@@ -20,7 +20,6 @@ const login = () => {
       Login(data, setCookies)
     }
   })
-
   return (
     <div className="containers relative !pt-[45px] h-[100vh]">
       <img className="logo-icon mb-[32px]" src={Logo} alt="Logo" width={40} height={40} />

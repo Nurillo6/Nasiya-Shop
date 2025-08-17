@@ -1,30 +1,29 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { BackIcon } from "../../assets/icons"
-import { CustomModal, Heading, PageLoading, Text } from "../../components"
+import { BackIcon } from "../../../assets/icons"
+import { CustomModal, Heading, Text } from "../../../components"
 import { MoreOutlined } from "@ant-design/icons"
 import { Button, DatePicker, Input, Popover, Select } from "antd"
 import { termList } from "./DebtCreate"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useCookies } from "react-cookie"
 import dayjs from "dayjs"
 import { useState } from "react"
-import { API, FormatNumber, instance } from "../../hooks"
+import { API, FormatNumber, instance } from "../../../hooks"
 
 const DebtSingle = () => {
-    const navigate = useNavigate()
-    const [cookies] = useCookies(['token']);
-    const queryClient = useQueryClient()
-    const [showModal, setShowModal] = useState<boolean>(false)
     const { debtId } = useParams()
-
-    const { data: singleDebt, isLoading } = useQuery({
+    const navigate = useNavigate()
+    const queryClient = useQueryClient()
+    
+    const [showModal, setShowModal] = useState<boolean>(false)
+    
+    const { data: singleDebt = {} } = useQuery({
         queryKey: ['single-debt'],
-        queryFn: () => instance().get(`/debt/${debtId}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => res.data.data)
+        queryFn: () => instance.get(`/debt/${debtId}`).then(res => res.data.data)
     })
 
     // Delete part
     const { mutate: deleteDebtor, isPending } = useMutation({
-        mutationFn: (id: string | undefined) => instance().delete(`/debt/${id}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }),
+        mutationFn: (id: string | undefined) => instance.delete(`/debt/${id}`),
         onSuccess: () => {
             setShowModal(false)
             navigate(-1)
@@ -45,7 +44,7 @@ const DebtSingle = () => {
     )
     return (
         <div className="containers !mt-[30px]">
-            {isLoading ? <PageLoading /> : <>
+            <>
                 <div className="flex items-center justify-between mb-[36px]">
                     <button className="cursor-pointer duration-300 hover:scale-[1.2]" onClick={() => navigate(-1)}> <BackIcon /> </button>
                     <Heading tag="h2">Batafsil</Heading>
@@ -77,7 +76,7 @@ const DebtSingle = () => {
                     <span className="text-[13px] font-semibold mb-[8px]">Summa miqdori </span>
                     <Input readOnly className="!h-[44px] !bg-[#F6F6F6]" value={FormatNumber(singleDebt?.totalPayments ? singleDebt?.totalPayments : "")} size="large" />
                 </label>
-                {singleDebt.note ?
+                {singleDebt?.note ?
                     <label className="mt-[24px] block">
                         <span className="text-[13px] font-semibold mb-[8px]">Eslatma</span>
                         <Input.TextArea readOnly value={singleDebt?.note} rows={4} className="!bg-[#F6F6F6]" size="large" />
@@ -86,12 +85,12 @@ const DebtSingle = () => {
                     <label className="mt-[24px] block">
                         <span className="text-[13px] font-semibold mb-[8px]">Rasmlar</span>
                         <div className="flex justify-between flex-wrap">
-                            {singleDebt?.ImgOfDebt.map((item: any) => <img key={item.id} className="w-[48%] rounded-[16px] h-[112px]" src={`${API}${item.name}`} alt="Debt img" width={300} height={300} />)}
+                            {singleDebt?.ImgOfDebt?.map((item: any) => <img key={item.id} className="w-[48%] rounded-[16px] h-[112px]" src={`${API}${item.name}`} alt="Debt img" width={300} height={300} />)}
                         </div>
                     </label>
                 }
                 <Button onClick={() => navigate("payment")} type="primary" htmlType="submit" size="large" className="!my-[24px] !w-full !h-[49px] !font-medium !text-[18px]">Nasiyani so‘ndirish</Button>
-            </>}
+            </>
             <CustomModal show={showModal} setShow={setShowModal}>
                 <Heading tag="h2">O'chirmoqchisiz?</Heading>
                 <div className="flex items-center justify-between mt-3">

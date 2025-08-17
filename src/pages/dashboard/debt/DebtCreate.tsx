@@ -1,13 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { Heading, UploadImage } from "../../components"
-import { BackIcon } from "../../assets/icons"
+import { Heading, UploadImage } from "../../../components"
+import { BackIcon } from "../../../assets/icons"
 import { Button, Checkbox, DatePicker, Input, Select, type CheckboxChangeEvent } from "antd"
 import { useState, type FormEvent } from "react"
 import dayjs from "dayjs"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useCookies } from "react-cookie"
 import toast from "react-hot-toast"
-import { instance } from "../../hooks"
+import { instance } from "../../../hooks"
 
 export const termList = [
   { value: 1, label: "1 oy" },
@@ -20,18 +19,18 @@ export const termList = [
 
 const DebtCreate = () => {
   const { id: debtorId, debtId } = useParams()
-  const [cookies] = useCookies(['token']);
-  const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
   const [productName, setProductName] = useState<string>("")
   const [date, setDate] = useState<string>()
   const [dateValue, setDateValue] = useState<any>("")
   const [amount, setAmount] = useState<number>()
   const [term, setTerm] = useState<number>()
-
   const [isNote, setIsNote] = useState<boolean>(false)
   const [note, setNote] = useState<string>("")
   const [images, setImages] = useState<Array<string>>([])
+
 
   function checkToday(e: CheckboxChangeEvent) {
     if (e.target.checked) {
@@ -46,16 +45,16 @@ const DebtCreate = () => {
     setDateValue(date)
     setDate(date.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"))
   }
-  const { mutate: createDebt } = useMutation({
-    mutationFn: (data: any) => instance().post("/debt", data, { headers: { "Authorization": `Bearer ${cookies.token}` } }),
+  const { mutate: createDebt, isPending:createPenning } = useMutation({
+    mutationFn: (data: any) => instance.post("/debt", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['single-debtor'] })
       toast.success("Yaratildi")
       navigate(-1)
     }
   })
-  const { mutate: updateDebt } = useMutation({
-    mutationFn: (data: any) => instance().patch(`/debt/${debtId}`, data, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(() => {
+  const { mutate: updateDebt , isPending:updatePenning} = useMutation({
+    mutationFn: (data: any) => instance.patch(`/debt/${debtId}`, data).then(() => {
       toast.success("O'zgardi")
       navigate(-1)
       queryClient.invalidateQueries({ queryKey: ['single-debt'] })
@@ -64,7 +63,6 @@ const DebtCreate = () => {
   const createDebtSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const data = { productName, date, amount, term, note, images, debtorId }
-
     if (debtId) {
       const result = images.map((item: any) => {
         if (item.name) {
@@ -84,7 +82,7 @@ const DebtCreate = () => {
 
   useQuery({
     queryKey: ['update-debt'],
-    queryFn: () => debtId ? instance().get(`/debt/${debtId}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => {
+    queryFn: () => debtId ? instance.get(`/debt/${debtId}`).then(res => {
       setProductName(res.data.data.productName)
       setAmount(res.data.data.amount)
       setDateValue(dayjs(res.data.data.date))
@@ -142,7 +140,7 @@ const DebtCreate = () => {
           </label>
           : <Button onClick={() => setIsNote(true)} htmlType="button" type="default" size="large" className="!h-[48px] mb-[24px] w-full">Izoh qo‘shish</Button>}
         <UploadImage imgNames={images} setImgNames={setImages} />
-        <Button htmlType="submit" type="primary" size="large" className="!h-[49px] !w-full !mt-[32px] !text-[18px] !font-medium">{debtId ? "Tahrirlash" : "Saqlash"}</Button>
+        <Button loading={debtId ? updatePenning : createPenning} htmlType="submit" type="primary" size="large" className="!h-[49px] !w-full !mt-[32px] !text-[18px] !font-medium">{debtId ? "Tahrirlash" : "Saqlash"}</Button>
       </form>
     </div>
   )

@@ -1,11 +1,10 @@
 import { Button, Segmented } from "antd";
 import { MessageIcon } from "../../../assets/icons"
-import { CustomModal, Heading, Text } from "../../../components"
+import { CustomModal, Heading, NotificationSkeleton, Text } from "../../../components"
 import { useState } from "react";
 import { HistoryPayment, NotificationMessage } from "../../../modules";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { NotificationType } from "../../../@types/NotificationType";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import NotificationMessageNotFound from "../../../modules/notification/NotificationMessageNotFound";
 import { FindMonth, instance, PhoneFormat } from "../../../hooks";
@@ -13,7 +12,6 @@ import { FindMonth, instance, PhoneFormat } from "../../../hooks";
 const Notification = () => {
   const [showMessage, setShowMessage] = useState<"Xabarlar tarixi" | "To‘lovlar tarixi">("Xabarlar tarixi")
   const [showModalAddMessage, setShowModalAddMessage] = useState<boolean>(false)
-  const [cookies] = useCookies(['token']);
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -24,7 +22,7 @@ const Notification = () => {
   // Get All Messages
   const { data = [], isLoading } = useQuery<NotificationType[]>({
     queryKey: ['add-message-debtor'],
-    queryFn: () => instance().get("/notification", { headers: { "Authorization": `Bearer ${cookies.token}` }, params: { get: "All" } }).then(res => res.data.data.notifications)
+    queryFn: () => instance.get("/notification", {params: { get: "All" } }).then(res => res.data.data.notifications)
   })
   // Get All Messages
   return (
@@ -43,7 +41,7 @@ const Notification = () => {
       <Button onClick={() => setShowModalAddMessage(true)} className="!text-[16px] !fixed !rounded-full !right-[calc(50%-185px)] !bottom-[80px] !p-0 !font-medium !h-[58px] !w-[58px]" type="primary" size="large" icon={<MessageIcon />}></Button>
       <CustomModal show={showModalAddMessage} setShow={setShowModalAddMessage}>
         <div className="h-[50vh] overflow-y-auto">
-          {isLoading ? "Loading..." : data.length > 0 ? data?.map((item: NotificationType) => (
+          {isLoading ? <NotificationSkeleton/> : data.length > 0 ? data?.map((item: NotificationType) => (
             <div onClick={() => handleSendMessage(item.id)} key={item.id} className="flex hover:bg-slate-100 duration-300 cursor-pointer items-center justify-between py-[16px] border-b-[1px] border-[#ECECEC]">
               <div>
                 <Text classList="!font-bold !text-[14px] !mb-[8px]">{item.name}</Text>

@@ -1,4 +1,4 @@
-import React, { useEffect, type Dispatch, type SetStateAction } from 'react';
+import React, { useEffect, type Dispatch,type SetStateAction } from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import { Button, Calendar } from 'antd';
@@ -7,16 +7,18 @@ import Heading from './Heading';
 import Text from './Text';
 import { ArrowIcon } from '../assets/icons';
 import { FindMonth, FormatNumber } from '../hooks';
+import SkeletonButton from 'antd/es/skeleton/Button';
 dayjs.extend(dayLocaleData);
 interface PageType {
   totalForMonth: number | string,
   setNowDate: Dispatch<SetStateAction<dayjs.Dayjs | undefined>>,
-  nowDate: dayjs.Dayjs | undefined
+  nowDate: dayjs.Dayjs | undefined,
+  isLoading:boolean
 }
 const wrapperStyle: React.CSSProperties = {
   width: "100%",
 };
-const CustomCalendar: React.FC<PageType> = ({ nowDate, setNowDate, totalForMonth }) => {
+const CustomCalendar: React.FC<PageType> = ({ nowDate, setNowDate, totalForMonth, isLoading }) => {
   function handleChooseDay(value: any) {
     setNowDate(value);
   }
@@ -49,7 +51,7 @@ const CustomCalendar: React.FC<PageType> = ({ nowDate, setNowDate, totalForMonth
               </div>
               <div className="flex items-center justify-between my-[20px]">
                 <Text classList="!font-semibold">Oylik jami:</Text>
-                <strong className="text-[14px] font-extrabold">{FormatNumber(totalForMonth)} <span className="font-normal">so‘m</span></strong>
+                <strong className="text-[14px] font-extrabold flex items-center gap-[5px]">{isLoading ? <SkeletonButton active className="!w-[55px] !h-[15px] !rounded-[16px] !overflow-hidden" /> :  FormatNumber(totalForMonth) } <span className="font-normal"> so‘m</span></strong>
               </div>
             </>
           )

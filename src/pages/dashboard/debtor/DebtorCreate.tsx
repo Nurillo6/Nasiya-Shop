@@ -1,16 +1,14 @@
 import { Button, Input } from "antd"
-import { BackIcon } from "../../assets/icons"
-import { Heading, Text, UploadImage } from "../../components"
+import { BackIcon } from "../../../assets/icons"
+import { Heading, Text, UploadImage } from "../../../components"
 import { useState, type FormEvent } from "react"
-import { useCookies } from "react-cookie"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-hot-toast"
 import { useNavigate, useParams } from "react-router-dom"
-import { instance } from "../../hooks"
+import { instance } from "../../../hooks"
 
 const DebtorCreate = () => {
     const { id } = useParams()
-    const [cookies] = useCookies(['token']);
     const navigate = useNavigate()
     const queryClient = useQueryClient()
 
@@ -30,22 +28,19 @@ const DebtorCreate = () => {
         updatedValues[index] = value;
         setPhones(updatedValues);
     };
-    const addPhone = () => {
-        setPhones([...phones, ""]);
-    };
-
+    const addPhone = () => setPhones([...phones, ""]);
     // Phone create 
 
     const [isNote, setIsNote] = useState<boolean>(false)
-    const { mutate: createDebtor } = useMutation({
-        mutationFn: (data: { name: string, address: string, note?: string | null }) => instance().post('/debtor', data, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(() => {
+    const { mutate: createDebtor,isPending:createPenning } = useMutation({
+        mutationFn: (data: { name: string, address: string, note?: string | null }) => instance.post('/debtor', data).then(() => {
             toast.success("Qo'shildi")
             navigate(-1)
             queryClient.invalidateQueries({ queryKey: ['debtor-list'] })
         })
     })
-    const { mutate: updateDebtor } = useMutation({
-        mutationFn: (data: { name: string, address: string, note?: string | null }) => instance().patch(`/debtor/${id}`, data, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(() => {
+    const { mutate: updateDebtor,isPending:updatePenning} = useMutation({
+        mutationFn: (data: { name: string, address: string, note?: string | null }) => instance.patch(`/debtor/${id}`, data).then(() => {
             toast.success("O'zgardi")
             navigate(-1)
             queryClient.invalidateQueries({ queryKey: ['debtor-list'] })
@@ -77,7 +72,7 @@ const DebtorCreate = () => {
     }
     useQuery({
         queryKey: ['update-debtor'],
-        queryFn: () => id ? instance().get(`/debtor/${id}`, { headers: { "Authorization": `Bearer ${cookies.token}` } }).then(res => {
+        queryFn: () => id ? instance.get(`/debtor/${id}`).then(res => {
             setName(res.data.data.name)
             setAddress(res.data.data.address)
             if (res.data.data.note) {
@@ -122,7 +117,7 @@ const DebtorCreate = () => {
                     <span className="text-[13px] font-semibold block mb-[8px]">Rasm biriktirish</span>
                     <UploadImage imgNames={imgNames} setImgNames={setImgNames} />
                 </label>
-                <Button type="primary" htmlType="submit" size="large" className="!my-[24px] !w-full !h-[49px] !font-medium !text-[18px]">{id ? "Tahrirlash" : "Saqlash"}</Button>
+                <Button loading={id ? updatePenning : createPenning} type="primary" htmlType="submit" size="large" className="!my-[24px] !w-full !h-[49px] !font-medium !text-[18px]">{id ? "Tahrirlash" : "Saqlash"}</Button>
             </form>
         </div>
     )
